@@ -1,21 +1,33 @@
-const { NotImplementedError } = require('../extensions/index.js');
+function transform(arr) {
+  let sequencesArray = ["--discard-next", "--discard-prev", "--double-next", "--double-prev"];
 
-/**
- * Create transformed array based on the control sequences that original
- * array contains
- * 
- * @param {Array} arr initial array
- * @returns {Array} transformed array
- * 
- * @example
- * 
- * transform([1, 2, 3, '--double-next', 4, 5]) => [1, 2, 3, 4, 4, 5]
- * transform([1, 2, 3, '--discard-prev', 4, 5]) => [1, 2, 4, 5]
- * 
- */
-function transform(/* arr */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+  if (!Array.isArray(arr)) {
+    throw new Error("'arr' parameter must be an instance of the Array!");
+  }
+
+  let newArray = [];
+
+  for (let i  = 0; i < arr.length; i++) {
+    if (arr[i] === sequencesArray[0]) {
+      i++;
+    } else if (arr[i] === sequencesArray[1]) {
+      if (arr[i - 1] && arr[i - 1] === newArray[newArray.length - 1]) {
+        newArray.pop();
+      }
+    } else if (arr[i] === sequencesArray[2]) {
+      if (arr[i + 1]) {
+        newArray.push(arr[i + 1]);
+      }
+    } else if (arr[i] === sequencesArray[3]) {
+      if (arr[i - 1] && arr[i - 1] === newArray[newArray.length - 1]) {
+        newArray.push(arr[i - 1]);
+      }
+    } else {
+      newArray.push(arr[i]);
+    }
+  }
+
+  return newArray;
 }
 
 module.exports = {
